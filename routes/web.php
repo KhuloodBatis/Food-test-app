@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SearchProductsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('search');
-});
+Route::get('/', [SearchProductsController::class, 'index']);
 
 Route::get('/cart', function () {
     return view('cart');
