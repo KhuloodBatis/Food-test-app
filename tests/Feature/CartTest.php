@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class CartTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     /** @test */
     public function item_can_be_added_to_the_cart()
     {
@@ -71,19 +71,18 @@ class CartTest extends TestCase
     public function items_added_to_the_cart_can_be_seen_in_the_cart_page()
     {
 
-        Product::factory()->create([
+      $taco = Product::factory()->create([
             'name' => 'Taco',
             'cost' => 1.5,
         ]);
-        Product::factory()->create([
+        $pizza = Product::factory()->create([
             'name' => 'Pizza',
             'cost' => 2.1,
         ]);
-        Product::factory()->create([
+        $BBQ =Product::factory()->create([
             'name' => 'BBQ',
             'cost' => 3.2,
         ]);
-
         $this->post('/cart', [
             'id' => 1, // Taco
         ]);
