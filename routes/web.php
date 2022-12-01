@@ -20,6 +20,7 @@ Route::get('/', [SearchProductsController::class, 'index']);
 Route::get('/cart', [CartController::class, 'index']);
 Route::post('/cart', [CartController::class, 'store']);
 Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+Route::patch('/cart/{id}', [CartController::class, 'update']);
 
 Route::get('/checkout', function () {
     return view('checkout');

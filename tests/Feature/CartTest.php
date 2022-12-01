@@ -156,4 +156,53 @@ public function item_can_be_removed_from_the_cart()
         ->assertDontSeeText('Pizza');
 
 }
+
+
+/** @test */
+public function cart_item_qty_can_be_updated()
+{
+    Product::factory()->create([
+        'name' => 'Taco',
+        'cost' => 1.5,
+    ]);
+    Product::factory()->create([
+        'name' => 'Pizza',
+        'cost' => 2.1,
+    ]);
+    Product::factory()->create([
+        'name' => 'BBQ',
+        'cost' => 3.2,
+    ]);
+
+    // add items to session
+    session(['cart' => [
+        ['id' => 1, 'qty' => 1], // Taco
+        ['id' => 3, 'qty' => 1], // BBQ
+    ]]);
+
+    $this->patch('/cart/3', [ // update qty of BBQ to 5
+        'qty' => 5,
+    ])
+    ->assertRedirect('/cart')
+    ->assertSessionHasNoErrors()
+    ->assertSessionHas('cart', [
+        ['id' => 1, 'qty' => 1],
+        ['id' => 3, 'qty' => 5],
+    ]);
+
+    // verify that cart page is showing the expected items
+    $this->get('/cart')
+        ->assertSeeInOrder([
+            // Item #1
+            'Taco',
+            '$1.5',
+            '1',
+
+            // Item #2
+            'BBQ',
+            '$3.2',
+            '5',
+        ]);
+
+}
 }
