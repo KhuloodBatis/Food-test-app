@@ -29,9 +29,15 @@
                                         <span>${{ $item['cost'] }}</span>
                                     </div>
 
-                                    <div class="float-end">
-                                        <button type="button" class="btn btn-link">Remove</button>
-                                    </div>
+                         <!-- UPDATE THIS SECTION -->
+                            <div class="float-end">
+                                <form action="/cart/{{ $item['id'] }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-link">Remove</button>
+                                </form>
+                            </div>
+                            <!-- END OF UPDATE -->
 
                                     <div class="clearfix"></div>
 

@@ -115,4 +115,45 @@ class CartTest extends TestCase
             ])
             ->assertDontSeeText('Pizza');
     }
+
+    /** @test */
+public function item_can_be_removed_from_the_cart()
+{
+
+    Product::factory()->create([
+        'name' => 'Taco',
+        'cost' => 1.5,
+    ]);
+    Product::factory()->create([
+        'name' => 'Pizza',
+        'cost' => 2.1,
+    ]);
+    Product::factory()->create([
+        'name' => 'BBQ',
+        'cost' => 3.2,
+    ]);
+
+    // add items to session
+    session(['cart' => [
+        ['id' => 2, 'qty' => 1], // Pizza
+        ['id' => 3, 'qty' => 3], // Taco
+    ]]);
+
+    $this->delete('/cart/2') // remove Pizza
+        ->assertRedirect('/cart')
+        ->assertSessionHasNoErrors()
+        ->assertSessionHas('cart', [
+            ['id' => 3, 'qty' => 3]
+    ]);
+
+    // verify that cart page is showing the expected items
+    $this->get('/cart')
+        ->assertSeeInOrder([
+            'BBQ', // item name
+            '$3.2', // cost
+            '3', // qty
+        ])
+        ->assertDontSeeText('Pizza');
+
+}
 }
